@@ -70,10 +70,28 @@ The checkout process is designed for high reliability using **Atomic Database Tr
 
 ---
 
-## ⚙️ Installation & Setup
+<h2>Architecture Details</h2>
+<p>The system leverages Laravel's service-oriented architecture to handle complex business logic for e-commerce environments.</p>
+<ul>
+    <li><strong>Security:</strong> Sanctum authentication and custom Middleware.</li>
+    <li><strong>Transactions:</strong> Atomic DB operations for order safety.</li>
+    <li><strong>Storage:</strong> Automated media management.</li>
+</ul>
 
-1. **Clone & Install:**
-   ```bash
-   git clone [https://github.com/yourusername/ecommerce-backend.git](https://github.com/yourusername/ecommerce-backend.git)
-   cd ecommerce-backend
-   composer install
+<h2>Key Technical Logic</h2>
+<h3>Checkout Workflow</h3>
+<p>Orders are processed within a database transaction to ensure that stock decrementing and order creation are treated as a single atomic unit.</p>
+
+<h2>API Reference</h2>
+<table>
+    <tr><th>Category</th><th>Endpoint</th><th>Method</th><th>Access</th></tr>
+    <tr><td>Auth</td><td>/api/login</td><td>POST</td><td>Public</td></tr>
+    <tr><td>Catalog</td><td>/api/products</td><td>GET</td><td>Public</td></tr>
+    <tr><td>Cart</td><td>/api/cart/add</td><td>POST</td><td>Customer</td></tr>
+    <tr><td>Checkout</td><td>/api/checkout</td><td>POST</td><td>Customer</td></tr>
+    <tr><td>Admin</td><td>/api/admin/orders</td><td>GET</td><td>Admin</td></tr>
+</table>
+
+<div class="footer">
+    © 2026 Pial Mahmud | Full-Stack Software Engineer
+</div>
