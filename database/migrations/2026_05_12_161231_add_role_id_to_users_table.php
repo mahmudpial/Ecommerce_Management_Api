@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::table('users', function (Blueprint $table) {
             // ১. role_id কলাম যোগ করা যা roles টেবিলের সাথে যুক্ত
             // এটি অবশ্যই 'after' ব্যবহার করে ইমেইল বা পাসওয়ার্ডের পরে রাখা ভালো
-            $table->foreignId('role_id')->after('password')->constrained()->onDelete('cascade');
+            $table->foreignId('role_id')->default(3)->after('password')->constrained()->onDelete('cascade');
         });
     }
 

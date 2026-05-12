@@ -12,11 +12,29 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained(); // Customer Information [cite: 83]
-            $table->string('invoice_number')->unique(); // Invoice Number [cite: 88]
-            $table->decimal('total_amount', 10, 2); // Total Amount [cite: 87]
-            $table->string('order_status')->default('Pending'); // Pending, Processing, Delivered, Cancelled [cite: 76, 77, 79, 80, 81]
-            $table->string('payment_status')->default('Unpaid'); // Payment Status [cite: 75]
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('invoice_no')->unique();
+
+            // কাস্টমার তথ্য (ইউজার প্রোফাইল পরিবর্তন করলেও অর্ডারের হিস্টোরি যেন ঠিক থাকে)
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone');
+            $table->text('address');
+
+            // পেমেন্ট তথ্য
+            $table->string('payment_method')->nullable(); // Cash on Delivery, SSLCommerz, etc.
+            $table->string('transaction_id')->nullable()->unique();
+
+            // হিসাব-নিকাশ
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('shipping_charge', 10, 2)->default(0);
+            $table->decimal('discount', 10, 2)->default(0);
+
+            // স্ট্যাটাস
+            $table->string('status')->default('pending'); // pending, confirmed, processing, picked, shipped, delivered, cancelled
+            $table->string('payment_status')->default('unpaid');
+
+            $table->text('order_notes')->nullable(); // কাস্টমারের কোনো বিশেষ অনুরোধ থাকলে
             $table->timestamps();
         });
     }

@@ -13,9 +13,15 @@ return new class extends Migration {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
+
+            // setNull ব্যবহার করা ভালো যদি আপনি চান প্রোডাক্ট ডিলিট হলেও অর্ডারের ডাটা থেকে যাক
             $table->foreignId('product_id')->constrained();
-            $table->integer('quantity'); // Quantity [cite: 85]
-            $table->decimal('price', 10, 2); // Price at the time of order [cite: 86]
+
+            $table->string('product_name'); // অর্ডার করার সময় প্রোডাক্টের নাম কি ছিল (ব্যাকআপের জন্য)
+            $table->integer('quantity');
+            $table->decimal('unit_price', 10, 2); // প্রতি ইউনিটের দাম
+            $table->decimal('total_price', 10, 2); // quantity * unit_price (রিপোর্টের জন্য সুবিধা)
+
             $table->timestamps();
         });
     }

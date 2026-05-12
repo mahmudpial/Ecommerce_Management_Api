@@ -20,22 +20,18 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-        // ডিফল্টভাবে 'Manager' রোল সেট করা (আপনি চাইলে এটি পরিবর্তন করতে পারেন)
-        $managerRole = Role::where('name', 'Manager')->first();
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => $managerRole->id,
         ]);
 
         return response()->json([
             'message' => 'User registered successfully',
-            'user' => $user
+            'user' => $user->load('role')
         ], 201);
     }
-
     // ২. ইউজার লগইন
     public function login(Request $request)
     {
