@@ -76,6 +76,7 @@ The checkout process is designed for high reliability using **Atomic Database Tr
 
 --[ ] Dashboard Stats: Analytics API for sales and low-stock alerts.
 
-<div class="footer">
-    © 2026 Pial Mahmud | Full-Stack Software Engineer
-</div>
+---
+
+### 👨‍💻 Developer
+** Pial Mahmud ** Full-Stack Software Engineer GitHub | LinkedIn
