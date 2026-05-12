@@ -69,14 +69,15 @@ The checkout process is designed for high reliability using **Atomic Database Tr
 | POST | `/api/admin/order-status/{id}`| Update order (e.g., Pending to Shipped) |
 
 ---
+
 ### 🔮 Roadmap
--- [ ] Payment Gateway: Stripe & SSLCommerz Integration.
+-- **Payment Gateway:** Stripe & SSLCommerz Integration.
 
--- [ ] Email Service: Order confirmation via SMTP/Mailgun.
+-- **Email Service:** Order confirmation via SMTP/Mailgun.
 
---[ ] Dashboard Stats: Analytics API for sales and low-stock alerts.
+-- **Dashboard Stats:** Analytics API for sales and low-stock alerts.
 
 ---
 
 ### 👨‍💻 Developer
-** Pial Mahmud ** Full-Stack Software Engineer GitHub | LinkedIn
+**Pial Mahmud** Full-Stack Software Engineer GitHub | LinkedIn
