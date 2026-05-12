@@ -16,11 +16,13 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // চেক করা হচ্ছে ইউজার লগইন করা কি না এবং সে অ্যাডমিন কি না
-        if (Auth::check() && $request->user()->role->name === 'Admin') {
+        // Auth::check() এর বদলে সরাসরি $request->user() চেক করা যায়
+        if ($request->user() && $request->user()->role?->name === 'Admin') {
             return $next($request);
         }
 
-        return response()->json(['message' => 'Unauthorized. Only Admin can access this.'], 403);
+        return response()->json([
+            'message' => 'Unauthorized. Only Admin can access this.'
+        ], 403);
     }
 }
