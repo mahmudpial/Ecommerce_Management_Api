@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
@@ -15,6 +16,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        // চেক করা হচ্ছে ইউজার লগইন করা কি না এবং সে অ্যাডমিন কি না
+        if (Auth::check() && $request->user()->role->name === 'Admin') {
+            return $next($request);
+        }
+
+        return response()->json(['message' => 'Unauthorized. Only Admin can access this.'], 403);
     }
 }
