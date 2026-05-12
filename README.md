@@ -1,8 +1,42 @@
-🚀 Ecommerce Management Backend APIA high-performance, secure, and scalable RESTful API built with Laravel 11. This backend system is designed to handle the core operations of a modern e-commerce platform, including inventory management, persistent shopping carts, and a robust checkout engine with automated stock control.🛠️ Technical StackFramework: Laravel 11 (PHP 8.2+)Database: MySQLAuthentication: Laravel Sanctum (Token-based)Architecture: MVC (Model-View-Controller) with API Resource PatternKey Packages: barryvdh/laravel-dompdf (Invoice Generation)🌟 Key Backend Features🔐 Security & Access ControlSanctum Integration: Secure API authentication for customers and administrators.Admin Middleware: Role-Based Access Control (RBAC) ensures that only authorized administrators can modify products, categories, or manage global orders.Data Validation: Strict request validation to ensure data integrity and prevent SQL injection or malicious inputs.📦 Inventory Management: Dynamic Relationships: Full CRUD for Products, Categories, and Brands with Eloquent relationships.Intelligent Filtering: Advanced search functionality and category-wise filtering for products.Smart Storage: Professional image upload logic with automated file cleanup in the public disk to optimize server space.🛒 Shopping Cart & Checkout LogicDatabase-Backed Cart: Persistent cart storage that allows users to sync their shopping experience across multiple devices.Atomic Checkout Transactions: Uses DB::transaction to ensure that orders are only created if all items are in stock and all database entries succeed.Concurrency Control: Utilizes lockForUpdate() to prevent race conditions during high-traffic sales.Automated Stock Reduction: Inventory levels are automatically decremented upon a successful order.📊 Order Management & InvoicingOrder Tracking: Detailed order history for customers including real-time status updates (Pending, Processing, Delivered, etc.).Professional Invoicing: Automated PDF invoice generation featuring unique invoice numbers and itemized pricing.📂 API Reference (Key Endpoints)Auth & UserMethodEndpointDescriptionPOST/api/registerCreate a new customer accountPOST/api/loginAuthenticate and receive a Bearer tokenCustomer FeaturesMethodEndpointDescriptionGET/api/cartView current cart itemsPOST/api/cart/addAdd product to cartPOST/api/checkoutProcess order and clear cartGET/api/my-ordersView purchase historyGET/api/order/invoice/{id}Download PDF invoiceAdmin ControlsMethodEndpointDescriptionPOST/api/productsAdd a new product (Admin Only)GET/api/admin/ordersView all system ordersPOST/api/admin/order-status/{id}Update order/payment status🚀 Roadmap (Future Enhancements)[ ] Payment Gateway: Integration with SSLCommerz, Stripe, or PayPal.[ ] Email Notifications: Automated SMTP mail triggers for order confirmations.[ ] Sales Analytics: Dedicated API for monthly revenue reports and low-stock alerts.[ ] Coupon Engine: Logic for percentage and flat-rate discount codes.⚙️ Installation & SetupClone the repository:Bashgit clone https://github.com/yourusername/ecommerce-backend.git
-Install Dependencies:Bashcomposer install
-Setup Environment:Bashcp .env.example .env
-php artisan key:generate
-Database & Storage:Configure your .env database settings and run:Bashphp artisan migrate
-php artisan storage:link
-Serve the API:Bashphp artisan serve
-👨‍💻 Developed ByPial Mahmud Full-Stack Software Engineer | Web Developer LinkedIn | GitHub
+<h2>Technical Stack</h2>
+<ul>
+    <li><strong>Framework:</strong> Laravel 11 (PHP 8.2+)</li>
+    <li><strong>Database:</strong> MySQL</li>
+    <li><strong>Authentication:</strong> Laravel Sanctum (Token-based)</li>
+    <li><strong>Packages:</strong> barryvdh/laravel-dompdf</li>
+</ul>
+
+<h2>Key Backend Features</h2>
+<h3>Security & Access Control</h3>
+<ul>
+    <li><strong>Sanctum Integration:</strong> Secure API authentication.</li>
+    <li><strong>Admin Middleware:</strong> Role-Based Access Control (RBAC).</li>
+    <li><strong>Data Validation:</strong> Strict request validation for integrity.</li>
+</ul>
+
+<h3>Inventory Management</h3>
+<ul>
+    <li><strong>Dynamic Relationships:</strong> Full CRUD for Products, Categories, and Brands.</li>
+    <li><strong>Intelligent Filtering:</strong> Advanced search and category filters.</li>
+    <li><strong>Smart Storage:</strong> Automated image upload and cleanup.</li>
+</ul>
+
+<h3>Shopping Cart & Checkout Logic</h3>
+<ul>
+    <li><strong>Database-Backed Cart:</strong> Persistent storage for cross-device syncing.</li>
+    <li><strong>Atomic Transactions:</strong> Database transactions (DB::transaction) for reliability.</li>
+    <li><strong>Stock Protection:</strong> Concurrency control using lockForUpdate().</li>
+</ul>
+
+<h2>API Reference</h2>
+<table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td>POST</td><td>/api/register</td><td>Create customer account</td></tr>
+    <tr><td>POST</td><td>/api/login</td><td>Authenticate user</td></tr>
+    <tr><td>GET</td><td>/api/cart</td><td>View cart items</td></tr>
+    <tr><td>POST</td><td>/api/checkout</td><td>Process order</td></tr>
+    <tr><td>GET</td><td>/api/admin/orders</td><td>View all orders (Admin)</td></tr>
+</table>
+
+<h2>Installation & Setup</h2>
+<pre>
