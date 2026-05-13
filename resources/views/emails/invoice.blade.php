@@ -53,7 +53,7 @@
         <div class="header">
             <div>
                 <h2>OnionTrade Pro</h2>
-                <p>Invoice #: {{ $order->invoice_no }}</p>
+                <p>Invoice #: {{ $order->invoice_number }}</p>
                 <p>Date: {{ $order->created_at->format('d M Y') }}</p>
             </div>
             <div style="text-align: right;">

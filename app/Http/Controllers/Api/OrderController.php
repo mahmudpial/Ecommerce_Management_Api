@@ -85,6 +85,6 @@ class OrderController extends Controller
         $pdf = Pdf::loadView('invoices.order_invoice', compact('order'));
 
         // ফাইলটি ডাউনলোড করার জন্য
-        return $pdf->download('invoice-' . $order->invoice_no . '.pdf');
+        return $pdf->download('invoice-' . $order->invoice_number . '.pdf');
     }
 }
