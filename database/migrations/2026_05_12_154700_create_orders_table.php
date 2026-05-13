@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('invoice_no')->unique();
+            $table->string('invoice_number')->unique();
 
             // কাস্টমার তথ্য (ইউজার প্রোফাইল পরিবর্তন করলেও অর্ডারের হিস্টোরি যেন ঠিক থাকে)
             $table->string('name');

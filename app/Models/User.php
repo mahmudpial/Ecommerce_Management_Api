@@ -6,19 +6,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 
-
-#[Fillable(['name', 'email', 'password', 'role_id'])]
-#[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    // ২. HasApiTokens ট্রেইটটি ব্যবহার করুন
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * Role এর সাথে রিলেশন (প্রতিটি ইউজারের একটি রোল থাকে)
+     * Standard Laravel property use kora-i best practice.
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'role_id', // role_id ekhane thaka khub-i joruri
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * Role এর সাথে রিলেশন (বাকি সব ঠিক আছে)
      */
     public function role()
     {
@@ -26,10 +35,11 @@ class User extends Authenticatable
     }
 
     /**
-     * এটি অ্যাডমিন কিনা চেক করার জন্য (সহজ করার জন্য)
+     * Admin check korar logic
      */
     public function isAdmin()
     {
+        // $this->role object ti loading thaka obosthay check korbe
         return $this->role && $this->role->name === 'Admin';
     }
 

@@ -9,54 +9,52 @@ use App\Http\Controllers\Api\BrandController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ReportController; // Report-er jonno path define kora
 
-// ১. পাবলিক রুট (সবাই এক্সেস করতে পারবে)
+// ১. পাবলিক রুট
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::get('/products', [ProductController::class, 'index']);
-Route::get('/products/category/{id}', [ProductController::class, 'getByCategory']);
+Route::get('/products/{id}', [ProductController::class, 'show']); // Single product details
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/brands', [BrandController::class, 'index']);
 
-// ২. অথেনটিকেটেড রুট (লগইন করা যে কেউ এক্সেস করতে পারবে)
+// ২. অথেনটিকেটেড রুট (Customer + Admin)
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    // কাস্টমার কার্ট এবং চেকআউট (এগুলো অ্যাডমিন মিডলওয়্যারের বাইরে থাকবে)
-    Route::get('/cart', [CartController::class, 'index']);
-    Route::post('/cart/add', [CartController::class, 'store']);
-    Route::put('/cart/update/{id}', [CartController::class, 'update']);
-    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy']);
-    Route::delete('/cart/clear', [CartController::class, 'clear']);
+    // কার্ট এবং চেকআউট
+    Route::prefix('cart')->group(function () {
+        Route::get('/', [CartController::class, 'index']);
+        Route::post('/add', [CartController::class, 'store']);
+        Route::put('/update/{id}', [CartController::class, 'update']);
+        Route::delete('/remove/{id}', [CartController::class, 'destroy']);
+        Route::delete('/clear', [CartController::class, 'clear']);
+    });
 
     Route::post('/checkout', [CheckoutController::class, 'placeOrder']);
 
-    // কাস্টমারের নিজের অর্ডার দেখার জন্য
+    // কাস্টমার অর্ডার হিস্ট্রি
     Route::get('/my-orders', [OrderController::class, 'index']);
-    Route::get('/my-orders/{id}', [OrderController::class, 'show']);
     Route::get('/order/invoice/{id}', [OrderController::class, 'downloadInvoice']);
 
-    // ৩. শুধুমাত্র অ্যাডমিন রুট (যাদের role_id অ্যাডমিন)
+    // ৩. শুধুমাত্র অ্যাডমিন ও ম্যানেজার রুট
     Route::middleware('admin')->group(function () {
-        // প্রোডাক্ট ম্যানেজমেন্ট
+        // প্রোডাক্ট আপডেট রুটটি অ্যাডমিন ব্লকে যোগ করা হলো
         Route::post('/products', [ProductController::class, 'store']);
+        Route::post('/products/{id}', [ProductController::class, 'update']); // Missing update route
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
-
-        // ক্যাটাগরি ও ব্র্যান্ড ম্যানেজমেন্ট
-        Route::post('/categories', [CategoryController::class, 'store']);
-        Route::post('/categories/{id}', [CategoryController::class, 'update']);
-        Route::delete('/categories/{id}', [CategoryController::class, 'destroy']);
-
-        Route::post('/brands', [BrandController::class, 'store']);
-        Route::post('/brands/{id}', [BrandController::class, 'update']);
-        Route::delete('/brands/{id}', [BrandController::class, 'destroy']);
 
         // অ্যাডমিন অর্ডার ম্যানেজমেন্ট
         Route::get('/admin/orders', [OrderController::class, 'allOrders']);
         Route::post('/admin/order-status/{id}', [OrderController::class, 'updateStatus']);
+
+        // ৪. রিপোর্ট মডিউল (Assignment Requirement)
+        Route::get('/admin/reports/sales', [ReportController::class, 'salesReport']);
+        Route::get('/admin/reports/stock', [ReportController::class, 'stockReport']);
     });
 });

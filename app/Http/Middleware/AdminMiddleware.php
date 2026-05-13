@@ -5,24 +5,38 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
 class AdminMiddleware
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Auth::check() এর বদলে সরাসরি $request->user() চেক করা যায়
-        if ($request->user() && $request->user()->role?->name === 'Admin') {
-            return $next($request);
+        $user = $request->user();
+
+        // Check if user exists and has a role
+        if ($user && $user->role) {
+            $role = $user->role->name;
+
+            // Allow both Admin and Manager for general dashboard/order tasks
+            if ($role === 'Admin' || $role === 'Manager') {
+
+                /* Optional: Strict Check
+                   If the request is a DELETE method, only allow 'Admin'
+                */
+                if ($request->isMethod('delete') && $role !== 'Admin') {
+                    return response()->json([
+                        'message' => 'Unauthorized. Only Super Admin can delete resources.'
+                    ], 403);
+                }
+
+                return $next($request);
+            }
         }
 
         return response()->json([
-            'message' => 'Unauthorized. Only Admin can access this.'
+            'message' => 'Access Denied. You do not have the required permissions.'
         ], 403);
     }
 }

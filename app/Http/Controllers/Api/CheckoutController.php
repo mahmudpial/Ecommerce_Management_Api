@@ -38,13 +38,14 @@ class CheckoutController extends Controller
             // ২. মেইন অর্ডার তৈরি
             $order = Order::create([
                 'user_id' => $userId,
-                'invoice_no' => 'INV-' . strtoupper(Str::random(10)),
+                // আপনার এরর অনুযায়ী কলামের নাম 'invoice_number' হওয়ার কথা
+                'invoice_number' => 'INV-' . strtoupper(Str::random(10)),
                 'name' => $request->name,
                 'email' => Auth::user()->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'payment_method' => $request->payment_method,
-                'total_amount' => 0,
+                'total_amount' => $totalAmount, // পরে আপডেট হবে
                 'status' => 'pending',
                 'payment_status' => 'unpaid',
             ]);
@@ -81,9 +82,9 @@ class CheckoutController extends Controller
             CartItem::where('user_id', $userId)->delete();
 
             return response()->json([
-                'message' => 'অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
-                'invoice_no' => $order->invoice_no,
-                'total' => $totalAmount
+                'message' => 'অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
+                'invoice_no' => $order->invoice_number,
+                'total' => $order->total_amount
             ], 201);
         });
     }

@@ -36,7 +36,7 @@
         }
 
         .table th {
-            background-color: #f2 f2 f2;
+            background-color: #f2f2f2;
         }
 
         .total {

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -20,18 +19,19 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role_id' => 3, // ডিফল্টভাবে 'User' বা 'Customer' রোল আইডি (আপনার ডাটাবেস অনুযায়ী)
         ]);
 
         return response()->json([
             'message' => 'User registered successfully',
-            'user' => $user->load('role')
+            'user' => $user->load('role') // এখানে এখন রোল অবজেক্টসহ আসবে
         ], 201);
     }
+
     // ২. ইউজার লগইন
     public function login(Request $request)
     {
@@ -44,15 +44,14 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid login details'], 401);
         }
 
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = User::where('email', $request->email)->with('role')->firstOrFail();
 
-        // টোকেন তৈরি করা (Vue.js এর জন্য এটিই সবচেয়ে গুরুত্বপূর্ণ)
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => $user->load('role') // রোলের তথ্যসহ ইউজার পাঠানো
+            'user' => $user // with('role') করার কারণে এখানে সব তথ্য আছে
         ]);
     }
 }
