@@ -38,11 +38,11 @@ The backend development is complete, using a secure RESTful API with high-effici
 
 The API architecture features professional RESTful routing categorized by access level:
 
-| Role | Operational Access | Destructive Actions (DELETE) |
-| :--- | :--- | :--- |
-| **Admin** | ✅ Yes | ✅ Yes |
-| **Manager** | ✅ Yes | ❌ No |
-| **User** | ❌ No | ❌ No |
+| Role | Operational Access | Destructive Actions (DELETE) | Reporting Access |
+| :--- | :--- | :--- | :--- |
+| **Admin** | ✅ Yes | ✅ Yes | ✅ Yes |
+| **Manager** | ✅ Yes | ❌ No | ✅ Yes |
+| **User** | ❌ No | ❌ No | ❌ No |
 
 ---
 
@@ -73,6 +73,9 @@ The API architecture features professional RESTful routing categorized by access
 | POST | `/api/categories` | Manage product categories |
 | GET | `/api/admin/orders` | View all orders in the system |
 | POST | `/api/admin/order-status/{id}`| Update order (e.g., Pending to Shipped) |
+| GET | `/api/reports/sales` | Generate sales reports with date filters |
+| GET | `/api/reports/sales/pdf`| **Export Sales Report as PDF** |
+| GET | `/api/reports/stock` | View real-time stock and low-stock alerts |
 
 ---
 
