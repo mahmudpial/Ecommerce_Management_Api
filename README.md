@@ -1,4 +1,4 @@
-# E-commerce Management Backend API
+# E-commerce Management API
 
 A production-ready, high-performance **RESTful API** built with **Laravel 11**. This system serves as the core engine for modern e-commerce platforms, featuring secure authentication, role-based access control, persistent cart management, and an atomic checkout system with automated stock synchronization. In a professional setting, an e-commerce backend isn't just about showing products; it's about trust and data integrity
 
@@ -51,6 +51,35 @@ The API architecture features professional RESTful routing categorized by access
 | **Administrative** | Product/Brand CRUD, global order management, and system analytics. |
 
 ---
+## 📂 API Endpoint Documentation
+
+### 🔓 Public Endpoints
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| POST | `/api/register` | Register a new user account |
+| POST | `/api/login` | Login and receive Bearer Token |
+| GET | `/api/products` | Browse products with search & pagination |
+| GET | `/api/categories`| List all product categories |
+
+### 🛍️ Customer Endpoints (Auth Required)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| GET | `/api/cart` | Retrieve current cart items |
+| POST | `/api/cart/add` | Add or increment product in cart |
+| DELETE| `/api/cart/remove/{id}`| Remove specific item from cart |
+| POST | `/api/checkout` | Process order and clear cart |
+| GET | `/api/my-orders` | View personal order history |
+| GET | `/api/order/invoice/{id}`| Download PDF invoice |
+
+### 🛠️ Admin Endpoints (Admin Middleware Required)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| POST | `/api/products` | Create new product with image upload |
+| POST | `/api/categories` | Manage product categories |
+| GET | `/api/admin/orders` | View all orders in the system |
+| POST | `/api/admin/order-status/{id}`| Update order (e.g., Pending to Shipped) |
+
+---
 
 ## 🔮 Roadmap
 *   **Payment Gateways:** Integration with **Stripe**, **SSLCommerz**, and **PayPal**.
@@ -79,4 +108,4 @@ The above copyright notice and this permission notice shall be included in all c
 ### 👨‍💻 Developer
 **Pial Mahmud**  
 *Full-Stack Software Engineer*  
-[GitHub](https://github.com/pialmahmud) | [LinkedIn](https://linkedin.com/in/pialmahmud)
+[GitHub](https://github.com/mahmudpial) | [LinkedIn](https://linkedin.com/in/pialmahmud)
