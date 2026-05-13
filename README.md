@@ -6,37 +6,37 @@ A production-ready, high-performance **RESTful API** built with **Laravel 11**. 
 
 ## 🏛️ System Architecture
 
-The backend follows the **MVC (Model-View-Controller)** pattern and leverages Laravel's robust ecosystem to ensure scalability and data integrity.
+The backend implements a **Service-Repository Pattern** and leverages Laravel's robust ecosystem to ensure scalability and data integrity.
 
 ### 🗄️ Database Schema & Relationships
-- **User ↔ Order:** One-to-Many (A user can track multiple historical orders).
-- **Order ↔ OrderItem:** One-to-Many (One order acts as a container for multiple products).
-- **Product ↔ Category/Brand:** BelongsTo (Strict categorization for optimized searching and filtering).
-- **User ↔ CartItem:** One-to-Many (Database-backed persistent cart logic).
+*   **User ↔ Order:** One-to-Many (Persistent historical tracking).
+*   **Order ↔ OrderItem:** One-to-Many (Line-item granularity for financial reporting).
+*   **Product ↔ Category/Brand:** BelongsTo (Indexed for optimized filtering and search).
+*   **User ↔ CartItem:** One-to-Many (Database-backed persistent shopping sessions).
 
 ---
 
 ## 🌟 Key Technical Features
 
-### 🔐 Multi-Layered Security
-- **Authentication:** Powered by **Laravel Sanctum** for secure, token-based stateful authentication.
-- **Role-Based Access Control (RBAC):** Custom `AdminMiddleware` protects sensitive administrative endpoints.
-- **Authorization Checks:** Ownership verification ensures customers can only access their own orders and invoices.
-- **Request Validation:** Strict validation rules for all incoming data to prevent SQL injection and malformed inputs.
+### 🔐 Enterprise-Grade Security
+*   **Authentication:** Powered by **Laravel Sanctum** for secure, token-based stateful authentication.
+*   **RBAC (Role-Based Access Control):** Custom `AdminMiddleware` protects sensitive administrative endpoints.
+*   **Resource Authorization:** Laravel **Policies** ensure customers can only access their own orders and invoices.
+*   **Input Integrity:** Strict **Form Request Validation** to prevent malformed data and XSS/SQL injection.
 
-### 🛒 Advanced Checkout Engine
-The checkout process is designed for high reliability using **Atomic Database Transactions**:
-1. **Row Locking:** Uses `lockForUpdate()` during stock verification to prevent race conditions.
-2. **Transaction Integrity:** Uses `DB::transaction()` to ensure that if any step (order creation, stock update, or cart clearing) fails, the entire process is rolled back.
-3. **Automated Inventory:** Real-time stock decrementing upon successful order placement.
+### 🛒 High-Concurrency Checkout Engine
+The checkout process is engineered for **Atomicity** and **Isolation** using Database Transactions:
+1.  **Pessimistic Locking:** Utilizes `lockForUpdate()` during stock verification to prevent race conditions during flash sales.
+2.  **ACID Compliance:** Wraps the entire lifecycle (order creation, stock decrement, and cart clearing) in `DB::transaction()` to ensure zero data corruption.
+3.  **Inventory Logic:** Real-time stock management with automated "Out of Stock" status triggers.
 
-### 📂 Media & Storage Management
-- **Intelligent File Handling:** Managed via Laravel's `Storage` facade.
-- **Automated Cleanup:** When a product is updated or deleted, the system automatically removes associated image files from the server to optimize disk space.
+### 📂 Optimized Media Handling
+*   **Filesystem Abstraction:** Managed via Laravel’s `Storage` facade for easy migration from local disks to **AWS S3** or **DigitalOcean Spaces**.
+*   **Garbage Collection:** Automated cleanup hooks delete associated image files when products are removed, preventing "ghost" files from bloating storage.
 
 ### 📄 Professional Invoicing
-- **PDF Generation:** Integrated with `barryvdh/laravel-dompdf`.
-- **Dynamic Invoices:** Generates itemized, professional invoices including unique invoice numbers, tax calculations, and customer details.
+*   **PDF Engine:** Integrated with `barryvdh/laravel-dompdf`.
+*   **Dynamic Generation:** Renders itemized, professional invoices with unique invoice numbers, tax calculations, and customer-specific metadata.
 
 ---
 
@@ -45,39 +45,52 @@ The checkout process is designed for high reliability using **Atomic Database Tr
 ### 🔓 Public Endpoints
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| POST | `/api/register` | Register a new user account |
-| POST | `/api/login` | Login and receive Bearer Token |
-| GET | `/api/products` | Browse products with search & pagination |
-| GET | `/api/categories`| List all product categories |
+| `POST` | `/api/register` | Register a new user account |
+| `POST` | `/api/login` | Login and receive Bearer Token |
+| `GET` | `/api/products` | Browse products with advanced filtering & pagination |
+| `GET` | `/api/categories`| List all product categories |
 
 ### 🛍️ Customer Endpoints (Auth Required)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| GET | `/api/cart` | Retrieve current cart items |
-| POST | `/api/cart/add` | Add or increment product in cart |
-| DELETE| `/api/cart/remove/{id}`| Remove specific item from cart |
-| POST | `/api/checkout` | Process order and clear cart |
-| GET | `/api/my-orders` | View personal order history |
-| GET | `/api/order/invoice/{id}`| Download PDF invoice |
+| `GET` | `/api/cart` | Retrieve current cart items |
+| `POST` | `/api/cart/add` | Add or increment product in cart |
+| `DELETE`| `/api/cart/remove/{id}`| Remove specific item from cart |
+| `POST` | `/api/checkout` | Process order and clear cart atomically |
+| `GET` | `/api/my-orders` | View personal order history |
+| `GET` | `/api/order/invoice/{id}`| Generate and download PDF invoice |
 
 ### 🛠️ Admin Endpoints (Admin Middleware Required)
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
-| POST | `/api/products` | Create new product with image upload |
-| POST | `/api/categories` | Manage product categories |
-| GET | `/api/admin/orders` | View all orders in the system |
-| POST | `/api/admin/order-status/{id}`| Update order (e.g., Pending to Shipped) |
+| `POST` | `/api/products` | Create new product with multi-file upload |
+| `PATCH` | `/api/products/{id}` | Update product details and stock |
+| `GET` | `/api/admin/orders` | Global view of all orders in the system |
+| `POST` | `/api/admin/order-status/{id}`| Transition order state (e.g., Pending → Shipped) |
 
 ---
 
-### 🔮 Roadmap
--- **Payment Gateway:** Stripe & SSLCommerz Integration.
+## 🔮 Roadmap
+*   **Payment Gateways:** Integration with **Stripe**, **SSLCommerz**, and **PayPal**.
+*   **Asynchronous Processing:** Moving emails and PDF generation to **Redis Queues** for sub-second response times.
+*   **Advanced Analytics:** Dedicated endpoints for sales trends, low-stock alerts, and customer lifetime value (CLV).
+*   **Webhooks:** Automated notifications for order status changes via Slack or Discord.
 
--- **Email Service:** Order confirmation via SMTP/Mailgun.
+---
 
--- **Dashboard Stats:** Analytics API for sales and low-stock alerts.
+## 📜 License
+
+This project is open-source and available under the **MIT License**.
+
+Copyright (c) 2026 **Pial Mahmud**
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 ---
 
 ### 👨‍💻 Developer
-**Pial Mahmud** Full-Stack Software Engineer GitHub | LinkedIn
+**Pial Mahmud**  
+*Full-Stack Software Engineer*  
+[GitHub](https://github.com/pialmahmud) | [LinkedIn](https://linkedin.com/in/pialmahmud)
