@@ -10,12 +10,13 @@ use Carbon\Carbon;
 
 class ReportController extends Controller
 {
-    // ১. সেলস রিপোর্ট (Date Filter সহ)
+
     public function salesReport(Request $request)
     {
-        $query = Order::where('status', 'delivered');
 
-        // Date filter logic
+        $query = Order::where('status', 'completed');
+
+
         if ($request->start_date && $request->end_date) {
             $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
         }
@@ -35,8 +36,8 @@ class ReportController extends Controller
     public function stockReport()
     {
         $products = Product::select('id', 'name', 'stock', 'price')->get();
-        
-        $lowStock = $products->filter(function($product) {
+
+        $lowStock = $products->filter(function ($product) {
             return $product->stock < 10; // ১০ এর নিচে থাকলে লো-স্টক
         });
 
