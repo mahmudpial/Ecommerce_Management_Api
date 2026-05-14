@@ -42,18 +42,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-orders', [OrderController::class, 'index']);
     Route::get('/order/invoice/{id}', [OrderController::class, 'downloadInvoice']);
 
+
     // ৩. শুধুমাত্র অ্যাডমিন ও ম্যানেজার রুট
     Route::middleware('admin')->group(function () {
-        // প্রোডাক্ট আপডেট রুটটি অ্যাডমিন ব্লকে যোগ করা হলো
+
         Route::post('/products', [ProductController::class, 'store']);
-        Route::post('/products/{id}', [ProductController::class, 'update']); // Missing update route
+        Route::post('/products/{id}', [ProductController::class, 'update']);
         Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 
-        // অ্যাডমিন অর্ডার ম্যানেজমেন্ট
+        // 🎯 অ্যাডমিন অর্ডার ম্যানেজমেন্ট
         Route::get('/admin/orders', [OrderController::class, 'allOrders']);
         Route::post('/admin/order-status/{id}', [OrderController::class, 'updateStatus']);
+        Route::delete('/admin/orders/{id}', [OrderController::class, 'destroy']);
 
-        // ৪. রিপোর্ট মডিউল (Assignment Requirement)
+        // 🎯 ক্যাটাগরি এবং ব্র্যান্ডের জন্য অ্যাডমিন রাউটস (ইউআরএল এর আগে /admin যোগ করা হলো)
+        Route::post('/admin/categories', [CategoryController::class, 'store']);
+        Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy']);
+
+        Route::post('/admin/brands', [BrandController::class, 'store']);
+        Route::delete('/admin/brands/{id}', [BrandController::class, 'destroy']);
+
+        // ৪. রিপোর্ট মডিউল
         Route::get('/admin/reports/sales', [ReportController::class, 'salesReport']);
         Route::get('/admin/reports/stock', [ReportController::class, 'stockReport']);
     });

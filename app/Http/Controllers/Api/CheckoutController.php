@@ -83,6 +83,7 @@ class CheckoutController extends Controller
 
             return response()->json([
                 'message' => 'অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!',
+                'order_id' => $order->id,
                 'invoice_no' => $order->invoice_number,
                 'total' => $order->total_amount
             ], 201);

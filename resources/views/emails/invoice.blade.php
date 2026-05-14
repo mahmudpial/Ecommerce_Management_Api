@@ -2,10 +2,13 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Helvetica', 'Arial', sans-serif;
             color: #333;
+            font-size: 14px;
+            line-height: 1.4;
         }
 
         .invoice-box {
@@ -13,13 +16,20 @@
             margin: auto;
             padding: 30px;
             border: 1px solid #eee;
+            background: #fff;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
+        /* 🎯 dompdf ফিক্স: ফ্লেক্সবক্সের বদলে স্ট্যান্ডার্ড টেবিল লেআউট */
+        .header-table {
+            width: 100%;
             border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .header-table td {
+            vertical-align: top;
+            border: none !important;
         }
 
         .table {
@@ -37,47 +47,61 @@
 
         .table th {
             background-color: #f2f2f2;
+            font-semibold: bold;
         }
 
         .total {
             text-align: right;
-            margin-top: 20px;
+            margin-top: 25px;
             font-weight: bold;
             font-size: 1.2em;
+            color: #007bff;
         }
     </style>
 </head>
 
 <body>
     <div class="invoice-box">
-        <div class="header">
-            <div>
-                <h2>OnionTrade Pro</h2>
-                <p>Invoice #: {{ $order->invoice_number }}</p>
-                <p>Date: {{ $order->created_at->format('d M Y') }}</p>
-            </div>
-            <div style="text-align: right;">
-                <h4>Billed To:</h4>
-                <p>{{ $order->name }}<br>{{ $order->phone }}<br>{{ $order->address }}</p>
-            </div>
-        </div>
+        <table class="header-table">
+            <tr>
+                <td>
+                    <h2 style="margin: 0 0 5px 0; color: #007bff; font-size: 26px;">OnionTrade Pro</h2>
+                    <p style="margin: 2px 0; color: #555;"><strong>Invoice #:</strong> {{ $order->invoice_number }}</p>
+                    <p style="margin: 2px 0; color: #555;">
+                        <strong>Date:</strong>
+                        {{ $order->created_at ? date('d M Y', strtotime($order->created_at)) : date('d M Y') }}
+                    </p>
+                </td>
+                <td style="text-align: right;">
+                    <h4
+                        style="margin: 0 0 5px 0; color: #333; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px;">
+                        Billed To:</h4>
+                    <p style="margin: 0; color: #555; font-size: 14px;">
+                        <strong>{{ $order->name }}</strong><br>
+                        {{ $order->phone }}<br>
+                        <span style="text-transform: capitalize;">{{ $order->address }}</span>
+                    </p>
+                </td>
+            </tr>
+        </table>
 
         <table class="table">
             <thead>
                 <tr>
                     <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Qty</th>
-                    <th>Total</th>
+                    <th style="text-align: center;">Price</th>
+                    <th style="text-align: center;">Qty</th>
+                    <th style="text-align: right;">Total</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($order->orderItems as $item)
+
+                @foreach($order->items as $item)
                     <tr>
                         <td>{{ $item->product_name }}</td>
-                        <td>{{ number_format($item->unit_price, 2) }} TK</td>
-                        <td>{{ $item->quantity }}</td>
-                        <td>{{ number_format($item->total_price, 2) }} TK</td>
+                        <td style="text-align: center;">{{ number_format($item->unit_price, 2) }} TK</td>
+                        <td style="text-align: center;">{{ $item->quantity }}</td>
+                        <td style="text-align: right; font-weight: bold;">{{ number_format($item->total_price, 2) }} TK</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -87,7 +111,10 @@
             Total Amount: {{ number_format($order->total_amount, 2) }} TK
         </div>
 
-        <p style="margin-top: 50px; text-align: center; color: #777;">Thank you for shopping with OnionTrade Pro!</p>
+        <p
+            style="margin-top: 60px; text-align: center; color: #777; font-size: 12px; border-top: 1px dashed #ddd; padding-top: 15px;">
+            Thank you for shopping with Commercia Pro!
+        </p>
     </div>
 </body>
 
